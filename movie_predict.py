@@ -54,7 +54,7 @@ def text_to_dict(df):
         df[column] = df[column].apply(lambda x: {} if pd.isna(x) else ast.literal_eval(x) )
     return df
 
-# print "Converting text in original dataframe into dict with ast.literal_eval...\n\n"
+# print("Converting text in original dataframe into dict with ast.literal_eval...\n\n"
 # to_dict_movie_dataframe = movie_dataframe.copy()
 # to_dict_movie_dataframe = text_to_dict(to_dict_movie_dataframe)
 
@@ -62,8 +62,8 @@ def text_to_dict(df):
 def get_top(feature_name, length = 30, field = 'name'):
     x = to_dict_movie_dataframe[feature_name].apply(lambda x : [x[i][field] for i in range(len(x))] if x != {} else []).values
     top = [x[0] for x in Counter([i for j in x for i in j]).most_common(length)]
-    print " -- Top " + feature_name + "\n" + str(top)
-    print '\n\n'
+    print(" -- Top " + feature_name + "\n" + str(top))
+    print('\n\n')
     return top
 
 # def describe_json_feature(feature_name, field = 'name'):
@@ -127,7 +127,6 @@ from datetime import datetime
 
 def date(x, type):
     x=str(x)
-    # print "-- time " + x
     year=x.split('/')[2]
     if int(year)<19:
         date = x[:-2]+'20'+year
@@ -287,13 +286,13 @@ def preprocess_features(dataframe):
     #     print(k + " --> " + str(pf[k].size))
 
     # for column in pf:
-    #     print 'checking column ' + column
+    #     print('checking column ' + column
     #     for i in range(pf[column].size):
     #         if pd.isna(pf[column][i]):
-    #             print " -- isna row index " + str(i)
+    #             print(" -- isna row index " + str(i)
     # for c in pf:
-    #     print ' -- column ' + c
-    #     print pf[c].describe()
+    #     print(' -- column ' + c
+    #     print(pf[c].describe()
 
     return pf
 
@@ -413,11 +412,11 @@ def train_nn_regression_model(
         metrics.mean_squared_error(training_predictions, training_targets))
     validation_root_mean_squared_log_error = math.sqrt(
         metrics.mean_squared_error(validation_predictions, validation_targets))
-    # Occasionally print the current loss.
-    print '  -------------------------------------------------'
+    # Occasionally print(the current loss.
+    print('  -------------------------------------------------')
     print("  period %02d train rmsle: %0.2f" % (period, training_root_mean_squared_log_error))
     print("  period %02d validation rmsle: %0.2f" % (period, validation_root_mean_squared_log_error))
-    print '  -------------------------------------------------'
+    print('  -------------------------------------------------')
     # Add the loss metrics from this period to our list.
     training_rmse.append(training_root_mean_squared_log_error)
     validation_rmse.append(validation_root_mean_squared_log_error)
@@ -472,7 +471,7 @@ def k_fold(k=10):
         v_start_row = i * v_size # 0, 600, 1200, 1800, 2400
 
         def f(x):
-            print "------" + str(x)
+            print("------" + str(x))
             return x >= v_start_row and x < v_start_row + v_size
         v_df = movie_dataframe.iloc[v_start_row: v_start_row + v_size - 1]
 
@@ -486,10 +485,10 @@ def k_fold(k=10):
             df_right = movie_dataframe.iloc[v_start_row + v_size:]
             t_df = pd.concat([df_left, df_right], ignore_index=True)
 
-        print "\n\n -- Fold " + str(i)
-        print " -- validation set index: " + str(v_df.index)
-        print " -- training set index: " + str(t_df.index)
-        print " -- training set index length: " + str(t_df.shape[0])
+        print("\n\n -- Fold " + str(i))
+        print(" -- validation set index: " + str(v_df.index))
+        print(" -- training set index: " + str(t_df.index))
+        print(" -- training set index length: " + str(t_df.shape[0]))
 
         training_examples = preprocess_features(t_df)
         training_targets = preprocess_targets(t_df)
@@ -501,10 +500,10 @@ def k_fold(k=10):
             training_targets, validation_examples, validation_targets, './model_' + str(i), None)
         validation_rmse_l.append(validation_rmse[-1])
 
-    print ' ----- final k fold RMSLE are: '
-    print validation_rmse_l
-    print ' -- final mean: ' + str(sum(validation_rmse_l) / k)
-    print '\n\n\n'
+    print(' ----- final k fold RMSLE are: ')
+    print(validation_rmse_l)
+    print(' -- final mean: ' + str(sum(validation_rmse_l) / k))
+    print('\n\n\n')
 
 def predict_test_set(k=10):
     test_movie_dataframe = pd.read_csv("test.csv")
@@ -526,8 +525,8 @@ def predict_test_set(k=10):
         test_predictions = dnn_regressor.predict(input_fn=predict_test_input_fn)
         test_predictions = np.array([item['predictions'][0] for item in test_predictions])
 
-        print test_predictions
-        print "test_predictions len " + str(len(test_predictions))
+        print(test_predictions)
+        print("test_predictions len " + str(len(test_predictions)))
         for i in range(test_predictions.size):
             # average on k model predictions
             predict_results[i] += math.exp(test_predictions[i]) / k
@@ -610,21 +609,36 @@ class KFoldValidation():
         print("Final score: ", full_score)
         return full_score
 
+
+def convert_label_to_int(df, feature_name, vocabulary_list):
+    def f(x):
+        for i in range(len(vocabulary_list)):
+            if vocabulary_list[i] == x:
+                return i
+            return -1
+    df[feature_name] = df[feature_name].apply(lambda x : f(x))
+    return df
+
 def lgbm():
-    import lightgbm as lgb
+    import time
+    random_seed = int(time.time()) 
 
     train = preprocess_features(movie_dataframe)
     train['id'] = movie_dataframe['id']
-    train['revenue'] = np.log1p(movie_dataframe['revenue'])
+    train['revenue'] = movie_dataframe['revenue']
+    convert_label_to_int(train, 'original_language', language_v_list)
 
     test_raw = pd.read_csv("test.csv")
     test = preprocess_features(test_raw)
     test['id'] = test_raw['id']
+    convert_label_to_int(test, 'original_language', language_v_list)
 
     features = list(train.columns)
     features =  [i for i in features if i != 'id' and i != 'revenue']
 
     Kfolder = KFoldValidation(train)
+
+    import lightgbm as lgb
     lgbmodel = lgb.LGBMRegressor(n_estimators=10000, 
                              objective='regression', 
                              metric='rmse',
@@ -643,8 +657,78 @@ def lgbm():
                              subsample=.8, 
                              colsample_bytree=.9,
                              use_best_model=True)
-    Kfolder.validate(train, test, features , lgbmodel, name="lgbfinal", prepare_stacking=True) 
+    Kfolder.validate(train, test, features , lgbmodel, name="lgbfinal", prepare_stacking=True)
 
+    test['revenue'] =  np.expm1(test["lgbfinal"])
+    test[['id','revenue']].to_csv('submission_lgb.csv', index=False)
+    test[['id','revenue']].head()
+
+    import xgboost as xgb
+    xgbmodel = xgb.XGBRegressor(max_depth=5, 
+                            learning_rate=0.01, 
+                            n_estimators=10000, 
+                            objective='reg:linear', 
+                            gamma=1.45, 
+                            seed=random_seed, 
+                            silent=True,
+                            subsample=0.8, 
+                            colsample_bytree=0.7, 
+                            colsample_bylevel=0.5)
+    Kfolder.validate(train, test, features, xgbmodel, name="xgbfinal", prepare_stacking=True)
+
+    test['revenue'] =  np.expm1(test["xgbfinal"])
+    test[['id','revenue']].to_csv('submission_xgb.csv', index=False)
+    test[['id','revenue']].head()
+
+    import catboost as cat
+    catmodel = cat.CatBoostRegressor(iterations=10000, 
+                                 learning_rate=0.01, 
+                                 depth=5, 
+                                 eval_metric='RMSE',
+                                 colsample_bylevel=0.8,
+                                 bagging_temperature = 0.2,
+                                 metric_period = None,
+                                 early_stopping_rounds=200,
+                                 random_seed=random_seed)
+    Kfolder.validate(train, test, features , catmodel, name="catfinal", prepare_stacking=True,
+               fit_params={"use_best_model": True, "verbose": 100})
+
+    test['revenue'] =  np.expm1(test["catfinal"])
+    test[['id','revenue']].to_csv('submission_cat.csv', index=False)
+    test[['id','revenue']].head()
+
+    test['revenue'] =  np.expm1(0.4 * test["lgbfinal"]+ 0.4 * test["catfinal"] + 0.2 * test["xgbfinal"])
+    test[['id','revenue']].to_csv('submission_Dragon1.csv', index=False)
+    test[['id','revenue']].head()
+
+    test['revenue'] =  np.expm1((test["lgbfinal"] + test["catfinal"] + test["xgbfinal"])/3)
+    test[['id','revenue']].to_csv('submission_Dragon2.csv', index=False)
+    test[['id','revenue']].head()
+
+
+    train['Revenue_lgb'] = train["lgbfinal"]
+
+    print("RMSE model lgb :" ,score(train, train.Revenue_lgb),)
+
+    train['Revenue_xgb'] = train["xgbfinal"]
+
+    print("RMSE model xgb :" ,score(train, train.Revenue_xgb))
+
+    train['Revenue_cat'] = train["catfinal"]
+
+    print("RMSE model cat :" ,score(train, train.Revenue_cat))
+
+    train['Revenue_Dragon1'] = 0.4 * train["lgbfinal"] + \
+                                   0.2 * train["xgbfinal"] + \
+                                   0.4 * train["catfinal"]
+
+    print("RMSE model Dragon1 :" ,score(train, train.Revenue_Dragon1))
+
+    train['Revenue_Dragon2'] = 0.35 * train["lgbfinal"] + \
+                                   0.3 * train["xgbfinal"] + \
+                                   0.35 * train["catfinal"]
+
+    print("RMSE model Dragon2 :" ,score(train, train.Revenue_Dragon2))
 
 if __name__ == "__main__":
     # k = 20
