@@ -443,7 +443,7 @@ def train_predict(training_examples, training_targets, validation_examples, vali
     return train_nn_regression_model(
         my_optimizer=tf.train.ProximalAdagradOptimizer(learning_rate=0.001, l2_regularization_strength=0.005),
         steps=10000,
-        batch_size=200,
+        batch_size=50,
         hidden_units=dnn_hidden_units,
         training_examples=training_examples,
         training_targets=training_targets,
@@ -544,7 +544,111 @@ def predict_test_set(k=10):
         revenue = predict_results[i]
         writer.writerow({'id': test_movie_dataframe['id'][i], 'revenue': revenue})
 
+
+from sklearn.metrics import mean_squared_error
+def score(data, y):
+    validation_res = pd.DataFrame(
+    {"id": data["id"].values,
+     "transactionrevenue": data["revenue"].values,
+     "predictedrevenue": np.expm1(y)})
+
+    validation_res = validation_res.groupby("id")["transactionrevenue", "predictedrevenue"].sum().reset_index()
+    return np.sqrt(mean_squared_error(np.log1p(validation_res["transactionrevenue"].values), 
+                                     np.log1p(validation_res["predictedrevenue"].values)))
+
+
+from sklearn.model_selection import GroupKFold
+
+class KFoldValidation():
+    def __init__(self, data, n_splits=6):
+        unique_vis = np.array(sorted(data['id'].astype(str).unique()))
+        folds = GroupKFold(n_splits)
+        ids = np.arange(data.shape[0])
+        
+        self.fold_ids = []
+        for trn_vis, val_vis in folds.split(X=unique_vis, y=unique_vis, groups=unique_vis):
+            self.fold_ids.append([
+                    ids[data['id'].astype(str).isin(unique_vis[trn_vis])],
+                    ids[data['id'].astype(str).isin(unique_vis[val_vis])]
+                ])
+            
+    def validate(self, train, test, features, model, name="", prepare_stacking=False, 
+                 fit_params={"early_stopping_rounds": 500, "verbose": 100, "eval_metric": "rmse"}):
+        model.FI = pd.DataFrame(index=features)
+        full_score = 0
+        
+        if prepare_stacking:
+            test[name] = 0
+            train[name] = np.NaN
+        
+        for fold_id, (trn, val) in enumerate(self.fold_ids):
+            devel = train[features].iloc[trn]
+            y_devel = np.log1p(train["revenue"].iloc[trn])
+            valid = train[features].iloc[val]
+            y_valid = np.log1p(train["revenue"].iloc[val])
+                       
+            print("Fold ", fold_id, ":")
+            model.fit(devel, y_devel, eval_set=[(valid, y_valid)], **fit_params)
+            
+            if len(model.feature_importances_) == len(features):  
+                model.FI['fold' + str(fold_id)] = model.feature_importances_ / model.feature_importances_.sum()
+
+            predictions = model.predict(valid)
+            predictions[predictions < 0] = 0
+            print("Fold ", fold_id, " error: ", mean_squared_error(y_valid, predictions)**0.5)
+            
+            fold_score = score(train.iloc[val], predictions)
+            full_score += fold_score / len(self.fold_ids)
+            print("Fold ", fold_id, " score: ", fold_score)
+            if prepare_stacking:
+                train[name].iloc[val] = predictions
+                
+                test_predictions = model.predict(test[features])
+                test_predictions[test_predictions < 0] = 0
+                test[name] += test_predictions / len(self.fold_ids)
+                
+        print("Final score: ", full_score)
+        return full_score
+
+def lgbm():
+    import lightgbm as lgb
+
+    train = preprocess_features(movie_dataframe)
+    train['id'] = movie_dataframe['id']
+    train['revenue'] = np.log1p(movie_dataframe['revenue'])
+
+    test_raw = pd.read_csv("test.csv")
+    test = preprocess_features(test_raw)
+    test['id'] = test_raw['id']
+
+    features = list(train.columns)
+    features =  [i for i in features if i != 'id' and i != 'revenue']
+
+    Kfolder = KFoldValidation(train)
+    lgbmodel = lgb.LGBMRegressor(n_estimators=10000, 
+                             objective='regression', 
+                             metric='rmse',
+                             max_depth = 5,
+                             num_leaves=30, 
+                             min_child_samples=100,
+                             learning_rate=0.01,
+                             boosting = 'gbdt',
+                             min_data_in_leaf= 10,
+                             feature_fraction = 0.9,
+                             bagging_freq = 1,
+                             bagging_fraction = 0.9,
+                             importance_type='gain',
+                             lambda_l1 = 0.2,
+                             bagging_seed=random_seed, 
+                             subsample=.8, 
+                             colsample_bytree=.9,
+                             use_best_model=True)
+    Kfolder.validate(train, test, features , lgbmodel, name="lgbfinal", prepare_stacking=True) 
+
+
 if __name__ == "__main__":
-    k_fold()
-    predict_test_set()
+    # k = 20
+    # k_fold(k)
+    # predict_test_set(k)
+    lgbm()
 
