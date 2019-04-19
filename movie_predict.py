@@ -23,6 +23,60 @@ from collections import Counter
 tf.logging.set_verbosity(tf.logging.ERROR)
 
 movie_dataframe = pd.read_csv("train.csv")
+
+def clean_data(train):
+    train.loc[train['id'] == 16,'revenue'] = 192864          # Skinning
+    train.loc[train['id'] == 90,'budget'] = 30000000         # Sommersby          
+    train.loc[train['id'] == 118,'budget'] = 60000000        # Wild Hogs
+    train.loc[train['id'] == 149,'budget'] = 18000000        # Beethoven
+    train.loc[train['id'] == 313,'revenue'] = 12000000       # The Cookout 
+    train.loc[train['id'] == 451,'revenue'] = 12000000       # Chasing Liberty
+    train.loc[train['id'] == 464,'budget'] = 20000000        # Parenthood
+    train.loc[train['id'] == 470,'budget'] = 13000000        # The Karate Kid, Part II
+    train.loc[train['id'] == 513,'budget'] = 930000          # From Prada to Nada
+    train.loc[train['id'] == 797,'budget'] = 8000000         # Welcome to Dongmakgol
+    train.loc[train['id'] == 819,'budget'] = 90000000        # Alvin and the Chipmunks: The Road Chip
+    train.loc[train['id'] == 850,'budget'] = 90000000        # Modern Times
+    train.loc[train['id'] == 1007,'budget'] = 2              # Zyzzyx Road 
+    train.loc[train['id'] == 1112,'budget'] = 7500000        # An Officer and a Gentleman
+    train.loc[train['id'] == 1131,'budget'] = 4300000        # Smokey and the Bandit   
+    train.loc[train['id'] == 1359,'budget'] = 10000000       # Stir Crazy 
+    train.loc[train['id'] == 1542,'budget'] = 1              # All at Once
+    train.loc[train['id'] == 1570,'budget'] = 15800000       # Crocodile Dundee II
+    train.loc[train['id'] == 1571,'budget'] = 4000000        # Lady and the Tramp
+    train.loc[train['id'] == 1714,'budget'] = 46000000       # The Recruit
+    train.loc[train['id'] == 1721,'budget'] = 17500000       # Cocoon
+    train.loc[train['id'] == 1865,'revenue'] = 25000000      # Scooby-Doo 2: Monsters Unleashed
+    train.loc[train['id'] == 1885,'budget'] = 12             # In the Cut
+    train.loc[train['id'] == 2091,'budget'] = 10             # Deadfall
+    train.loc[train['id'] == 2268,'budget'] = 17500000       # Madea Goes to Jail budget
+    train.loc[train['id'] == 2491,'budget'] = 6              # Never Talk to Strangers
+    train.loc[train['id'] == 2602,'budget'] = 31000000       # Mr. Holland's Opus
+    train.loc[train['id'] == 2612,'budget'] = 15000000       # Field of Dreams
+    train.loc[train['id'] == 2696,'budget'] = 10000000       # Nurse 3-D
+    train.loc[train['id'] == 2801,'budget'] = 10000000       # Fracture
+    train.loc[train['id'] == 335,'budget'] = 2 
+    train.loc[train['id'] == 348,'budget'] = 12
+    train.loc[train['id'] == 470,'budget'] = 13000000 
+    train.loc[train['id'] == 513,'budget'] = 1100000
+    train.loc[train['id'] == 640,'budget'] = 6 
+    train.loc[train['id'] == 696,'budget'] = 1
+    train.loc[train['id'] == 797,'budget'] = 8000000 
+    train.loc[train['id'] == 850,'budget'] = 1500000
+    train.loc[train['id'] == 1199,'budget'] = 5 
+    train.loc[train['id'] == 1282,'budget'] = 9               # Death at a Funeral
+    train.loc[train['id'] == 1347,'budget'] = 1
+    train.loc[train['id'] == 1755,'budget'] = 2
+    train.loc[train['id'] == 1801,'budget'] = 5
+    train.loc[train['id'] == 1918,'budget'] = 592 
+    train.loc[train['id'] == 2033,'budget'] = 4
+    train.loc[train['id'] == 2118,'budget'] = 344 
+    train.loc[train['id'] == 2252,'budget'] = 130
+    train.loc[train['id'] == 2256,'budget'] = 1 
+    train.loc[train['id'] == 2696,'budget'] = 10000000
+    return train
+
+movie_dataframe = clean_data(movie_dataframe)
 movie_dataframe = movie_dataframe.reindex(np.random.permutation(movie_dataframe.index))
 movie_dataframe.reset_index(inplace=True, drop=True)
 
@@ -228,6 +282,7 @@ def preprocess_features(dataframe):
     "crew",
     "belongs_to_collection",
     "overview",
+    "imdb_id", # for joining with additional features
      ]]
 
     # pf means processed features
@@ -619,6 +674,40 @@ def convert_label_to_int(df, feature_name, vocabulary_list):
     df[feature_name] = df[feature_name].apply(lambda x : f(x))
     return df
 
+def process_additiona_features(df):
+    df.drop('imdb_id', axis=1, inplace=True)
+
+    df['rating'] = df['rating'].fillna(df['rating'].mean())
+    df['vote_count'] = df['totalVotes'].fillna(df['totalVotes'].mean())
+    df.drop('totalVotes',  axis=1, inplace=True)
+
+    #vote_count_na = df.groupby(["release_year","original_language"])['vote_count'].mean().reset_index()
+    #df[df.vote_count.isna()]['vote_count'] = df.merge(vote_count_na, how = 'left' ,on = ["release_year","original_language"])
+
+    df['meanruntimeByYear'] = df.groupby("release_year")["runtime"].aggregate('mean')
+    df['meanPopularityByYear'] = df.groupby("release_year")["popularity"].aggregate('mean')
+    df['meanBudgetByYear'] = df.groupby("release_year")["budget"].aggregate('mean')
+
+    df['_popularity_totalVotes_ratio'] = df['vote_count']/df['popularity']
+    df['_popularity2_totalVotes_ratio'] = df['vote_count']/df['popularity2']
+    df['_totalVotes_releaseYear_ratio'] = df['vote_count']/df['release_year']
+    df['_budget_totalVotes_ratio'] = df['budget']/df['vote_count']
+    
+    
+    df['_rating_popularity_ratio'] = df['rating']/df['popularity']
+    df['_rating_popularity2_ratio'] = df['rating']/df['popularity2']
+    df['_rating_totalVotes_ratio'] = df['vote_count']/df['rating']
+    df['_budget_rating_ratio'] = df['budget']/df['rating']
+    df['_runtime_rating_ratio'] = df['runtime']/df['rating']
+
+    df['popularity2'] = np.log1p(df['popularity2']).fillna(0)
+    df['rating'] =  linear_process(df['rating']).fillna(0)
+    df['vote_count'] = np.log1p(df['vote_count']).fillna(0)
+    df.reset_index(inplace=True, drop=True)
+
+    return df
+
+
 def lgbm():
     import time
     random_seed = int(time.time()) 
@@ -633,8 +722,18 @@ def lgbm():
     test['id'] = test_raw['id']
     convert_label_to_int(test, 'original_language', language_v_list)
 
+
+    trainAdditionalFeatures = pd.read_csv('./TrainAdditionalFeatures.csv')[['imdb_id','popularity2','rating', 'totalVotes']]
+    testAdditionalFeatures = pd.read_csv('./TestAdditionalFeatures.csv')[['imdb_id','popularity2','rating', 'totalVotes']]
+
+    train = pd.merge(train, trainAdditionalFeatures, how='left', on=['imdb_id'])
+    test = pd.merge(test, testAdditionalFeatures, how='left', on=['imdb_id'])
+
+    train = process_additiona_features(train)
+    test = process_additiona_features(test)
+
     features = list(train.columns)
-    features =  [i for i in features if i != 'id' and i != 'revenue']
+    features =  [i for i in features if i != 'id' and i != 'revenue' and i != 'imdb_id']
 
     Kfolder = KFoldValidation(train)
 
@@ -735,4 +834,14 @@ if __name__ == "__main__":
     # k_fold(k)
     # predict_test_set(k)
     lgbm()
+
+'''
+('RMSE model lgb :', 1.8380955518206552)
+('RMSE model xgb :', 1.8472091729832854)
+('RMSE model cat :', 1.8075541092962701)
+('RMSE model Dragon1 :', 1.8065819168154829)
+('RMSE model Dragon2 :', 1.809241445818128)
+
+test RMSE: 1.88
+'''
 
