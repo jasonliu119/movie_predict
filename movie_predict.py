@@ -76,6 +76,99 @@ def clean_data(train):
     train.loc[train['id'] == 2696,'budget'] = 10000000
     return train
 
+def clean_test_data(test):
+    test.loc[test['id'] == 6733,'budget'] = 5000000
+    test.loc[test['id'] == 3889,'budget'] = 15000000
+    test.loc[test['id'] == 6683,'budget'] = 50000000
+    test.loc[test['id'] == 5704,'budget'] = 4300000
+    test.loc[test['id'] == 6109,'budget'] = 281756
+    test.loc[test['id'] == 7242,'budget'] = 10000000
+    test.loc[test['id'] == 7021,'budget'] = 17540562       #  Two Is a Family
+    test.loc[test['id'] == 5591,'budget'] = 4000000        # The Orphanage
+    test.loc[test['id'] == 4282,'budget'] = 20000000       # Big Top Pee-wee
+    test.loc[test['id'] == 3033,'budget'] = 250 
+    test.loc[test['id'] == 3051,'budget'] = 50
+    test.loc[test['id'] == 3084,'budget'] = 337
+    test.loc[test['id'] == 3224,'budget'] = 4  
+    test.loc[test['id'] == 3594,'budget'] = 25  
+    test.loc[test['id'] == 3619,'budget'] = 500  
+    test.loc[test['id'] == 3831,'budget'] = 3  
+    test.loc[test['id'] == 3935,'budget'] = 500  
+    test.loc[test['id'] == 4049,'budget'] = 995946 
+    test.loc[test['id'] == 4424,'budget'] = 3  
+    test.loc[test['id'] == 4460,'budget'] = 8  
+    test.loc[test['id'] == 4555,'budget'] = 1200000 
+    test.loc[test['id'] == 4624,'budget'] = 30 
+    test.loc[test['id'] == 4645,'budget'] = 500 
+    test.loc[test['id'] == 4709,'budget'] = 450 
+    test.loc[test['id'] == 4839,'budget'] = 7
+    test.loc[test['id'] == 3125,'budget'] = 25 
+    test.loc[test['id'] == 3142,'budget'] = 1
+    test.loc[test['id'] == 3201,'budget'] = 450
+    test.loc[test['id'] == 3222,'budget'] = 6
+    test.loc[test['id'] == 3545,'budget'] = 38
+    test.loc[test['id'] == 3670,'budget'] = 18
+    test.loc[test['id'] == 3792,'budget'] = 19
+    test.loc[test['id'] == 3881,'budget'] = 7
+    test.loc[test['id'] == 3969,'budget'] = 400
+    test.loc[test['id'] == 4196,'budget'] = 6
+    test.loc[test['id'] == 4221,'budget'] = 11
+    test.loc[test['id'] == 4222,'budget'] = 500
+    test.loc[test['id'] == 4285,'budget'] = 11
+    test.loc[test['id'] == 4319,'budget'] = 1
+    test.loc[test['id'] == 4639,'budget'] = 10
+    test.loc[test['id'] == 4719,'budget'] = 45
+    test.loc[test['id'] == 4822,'budget'] = 22
+    test.loc[test['id'] == 4829,'budget'] = 20
+    test.loc[test['id'] == 4969,'budget'] = 20
+    test.loc[test['id'] == 5021,'budget'] = 40 
+    test.loc[test['id'] == 5035,'budget'] = 1 
+    test.loc[test['id'] == 5063,'budget'] = 14 
+    test.loc[test['id'] == 5119,'budget'] = 2 
+    test.loc[test['id'] == 5214,'budget'] = 30 
+    test.loc[test['id'] == 5221,'budget'] = 50 
+    test.loc[test['id'] == 4903,'budget'] = 15
+    test.loc[test['id'] == 4983,'budget'] = 3
+    test.loc[test['id'] == 5102,'budget'] = 28
+    test.loc[test['id'] == 5217,'budget'] = 75
+    test.loc[test['id'] == 5224,'budget'] = 3 
+    test.loc[test['id'] == 5469,'budget'] = 20 
+    test.loc[test['id'] == 5840,'budget'] = 1 
+    test.loc[test['id'] == 5960,'budget'] = 30
+    test.loc[test['id'] == 6506,'budget'] = 11 
+    test.loc[test['id'] == 6553,'budget'] = 280
+    test.loc[test['id'] == 6561,'budget'] = 7
+    test.loc[test['id'] == 6582,'budget'] = 218
+    test.loc[test['id'] == 6638,'budget'] = 5
+    test.loc[test['id'] == 6749,'budget'] = 8 
+    test.loc[test['id'] == 6759,'budget'] = 50 
+    test.loc[test['id'] == 6856,'budget'] = 10
+    test.loc[test['id'] == 6858,'budget'] =  100
+    test.loc[test['id'] == 6876,'budget'] =  250
+    test.loc[test['id'] == 6972,'budget'] = 1
+    test.loc[test['id'] == 7079,'budget'] = 8000000
+    test.loc[test['id'] == 7150,'budget'] = 118
+    test.loc[test['id'] == 6506,'budget'] = 118
+    test.loc[test['id'] == 7225,'budget'] = 6
+    test.loc[test['id'] == 7231,'budget'] = 85
+    test.loc[test['id'] == 5222,'budget'] = 5
+    test.loc[test['id'] == 5322,'budget'] = 90
+    test.loc[test['id'] == 5350,'budget'] = 70
+    test.loc[test['id'] == 5378,'budget'] = 10
+    test.loc[test['id'] == 5545,'budget'] = 80
+    test.loc[test['id'] == 5810,'budget'] = 8
+    test.loc[test['id'] == 5926,'budget'] = 300
+    test.loc[test['id'] == 5927,'budget'] = 4
+    test.loc[test['id'] == 5986,'budget'] = 1
+    test.loc[test['id'] == 6053,'budget'] = 20
+    test.loc[test['id'] == 6104,'budget'] = 1
+    test.loc[test['id'] == 6130,'budget'] = 30
+    test.loc[test['id'] == 6301,'budget'] = 150
+    test.loc[test['id'] == 6276,'budget'] = 100
+    test.loc[test['id'] == 6473,'budget'] = 100
+    test.loc[test['id'] == 6842,'budget'] = 30
+    return test
+
 movie_dataframe = clean_data(movie_dataframe)
 movie_dataframe = movie_dataframe.reindex(np.random.permutation(movie_dataframe.index))
 movie_dataframe.reset_index(inplace=True, drop=True)
@@ -100,7 +193,7 @@ movie_dataframe.reset_index(inplace=True, drop=True)
 #     print(len(np.array(movie_dataframe['original_language'])))
 
 import ast
-dict_columns = ['belongs_to_collection', 'genres', 'production_companies',
+dict_columns = ['belongs_to_collection', 'genres', 'production_companies_count',
                 'production_countries', 'spoken_languages', 'Keywords', 'cast', 'crew']
 
 def text_to_dict(df):
@@ -142,9 +235,9 @@ def get_top(feature_name, length = 30, field = 'name'):
 #     print("nan count " + str(null_count))
 
 def preprocess_targets(df):
-  output_targets = pd.DataFrame()
-  output_targets["revenue"] = np.log1p(df["revenue"])
-  return output_targets
+    output_targets = pd.DataFrame()
+    output_targets["revenue"] = np.log1p(df["revenue"])
+    return output_targets
 
 def log_linear_process(raw_series):
     # log and normalize
@@ -181,11 +274,17 @@ from datetime import datetime
 
 def date(x, type):
     x=str(x)
-    year=x.split('/')[2]
+    month, day, year=x.split('/')
     if int(year)<19:
         date = x[:-2]+'20'+year
-    else:
+    elif len(year)<4:
         date = x[:-2]+'19'+year
+    else:
+        date = x
+
+    if int(month) > 12:
+        date = "{}/{}/{}".format(day, month, year)
+
     date = datetime.strptime(date,'%m/%d/%Y')
 
     if type == 'weekday':
@@ -196,6 +295,8 @@ def date(x, type):
         return date.year
 
     return date.day
+
+country_v_list = ['GB', 'USA', 'IN', 'CHINA']
 
 genres_v_list = [u'Mystery', u'Romance', u'Family', u'Science Fiction', u'Horror',
         u'Crime', u'Drama', u'Fantasy', u'Western', u'Animation', u'Music',
@@ -242,6 +343,10 @@ collection_v_list = ['James Bond Collection', 'Friday the 13th Collection', 'The
     'Pirates of the Caribbean Collection', 'The Jaws Collection', 'Halloween Collection', 'Alex Cross Collection', 'Mexico Trilogy',
     'Planet of the Apes Original Collection', 'Diary of a Wimpy Kid Collection', 'The Vengeance Collection']
 
+# # Load rating data
+# rating_df = pd.read_csv("title.ratings.tsv", sep='\t')
+
+
 def replace_character(s):
     return s.replace(' ', '_').replace('+', '_').replace('(', '_').replace(')', '_').replace('\'', '_').replace(
         'é', '_').replace('[', '_').replace(']', '_')
@@ -266,6 +371,8 @@ def get_release_month_year_count(pf):
     return ret
 
 def preprocess_features(dataframe):
+    # dataframe = dataframe.merge(rating_df, left_on="imdb_id", right_on="tconst", how="left")
+
     selected_features = dataframe[
     [
     "budget",
@@ -283,34 +390,59 @@ def preprocess_features(dataframe):
     "belongs_to_collection",
     "overview",
     "imdb_id", # for joining with additional features
-     ]]
+    "status",
+    "original_title",
+    "title",
+    "production_countries"
+    ]]
 
     # pf means processed features
     pf = selected_features.copy()
-
-    pf["budget"] = np.log1p(pf["budget"]).fillna(0)
 
     pf = convert_to_multi_hot_column(pf, "genres", genres_v_list)
 
     pf["homepage"] = (pf["homepage"].isnull() == True).astype('int').fillna(0)
 
-    pf["popularity"] = pf["popularity"].fillna(0)
+    pf["budget"] = pf["budget"].fillna(np.nanmean(pf["budget"]))
+
+    pf['runtime'] = pf['runtime'].fillna(np.nanmean(pf['runtime']))
+
+    pf["popularity"] = pf["popularity"].fillna(np.nanmean(pf["popularity"]))
 
     pf["original_language"] = pf["original_language"].fillna('en')
 
     # pf["release_date"] = pf["release_date"].apply(lambda x : date(x))
     import random
+    pf['production_countries_count'] = pf['production_countries'].apply(lambda x : x.count('\'name\'') if not pd.isna(x) else 1)
+    pf['production_companies_count'] = pf['production_companies'].apply(lambda x : x.count('\'name\'') if not pd.isna(x) else 1)
+
+    # cast & crew
+    pf['cast_count'] = pf['cast'].apply(lambda x : x.count('\'cast_id\'') if not pd.isna(x) else 1)
+    pf['crew_count'] = pf['crew'].apply(lambda x : x.count('\'name\'') if not pd.isna(x) else 1)
+    # pf['genders_0_crew'] = pf['crew'].apply(lambda x: sum([1 for i in x if i['gender'] == 0]))
+    # pf['genders_1_crew'] = pf['crew'].apply(lambda x: sum([1 for i in x if i['gender'] == 1]))
+    # pf['genders_2_crew'] = pf['crew'].apply(lambda x: sum([1 for i in x if i['gender'] == 2]))
+
+
     pf['release_day'] = pf['release_date'].apply(lambda x: date(x, 'weekday') if not pd.isna(x) else random.randint(1,7)).astype(int)
     pf['release_month'] = pf['release_date'].apply(lambda x: date(x, 'month') if not pd.isna(x) else random.randint(1,12)).astype(int)
     pf['release_year'] = pf['release_date'].apply(lambda x: date(x, 'year') if not pd.isna(x) else 1990)
 
     pf['_budget_year_ratio'] = dataframe['budget'] / (pf['release_year'] * pf['release_year'])
     pf['_budget_year_ratio_2'] = np.log1p(dataframe['budget'] / pf['release_year'])
+
+    # budget
+    pf['originalBudget'] = pf['budget']
+    pf['inflationBudget'] = pf['budget'] + pf['budget']*1.8/100*(2018-pf['release_year'])
+
     pf['_budget_runtime_ratio'] = linear_process((dataframe['budget'] / (pf['runtime'] + 1)).fillna(0))
     pf['_budget_runtime_ratio_2'] = np.log1p((dataframe['budget'] * pf['runtime']).fillna(0))
+    pf["budget"] = np.log1p(pf["budget"])
 
-    pf['_releaseYear_popularity_ratio'] = np.log1p(pf['release_year'] / (pf['popularity'].fillna(0) + 1))
+    # popularity
+    pf['_releaseYear_popularity_ratio'] = np.log1p(pf['release_year'] / (pf['popularity'] + 1))
     pf['_releaseYear_popularity_ratio2'] = np.log1p(pf['popularity'] / pf['release_year'])
+    pf["popularity"] = np.log1p(pf["popularity"])
 
     # the count of the movies that was released in the same month
     # pf['release_month_year_count'] = get_release_month_year_count(pf)
@@ -318,11 +450,12 @@ def preprocess_features(dataframe):
     pf['release_year'] = linear_process(pf['release_year']).fillna(1990)
     pf.drop(['release_date'], axis=1, inplace=True)
 
-    pf["popularity"] = np.log1p(pf["popularity"]).fillna(0)
 
     pf = convert_to_multi_hot_column(pf, "production_companies", company_v_list)
 
-    pf['runtime'] = linear_process(pf['runtime']).fillna(0)
+    pf = convert_to_multi_hot_column(pf, "production_countries", country_v_list)
+
+    pf['runtime'] = linear_process(pf['runtime'])
 
     pf = convert_to_multi_hot_column(pf, "spoken_languages", language_v_list)
 
@@ -334,8 +467,13 @@ def preprocess_features(dataframe):
 
     pf = convert_to_multi_hot_column(pf, "belongs_to_collection", collection_v_list)
 
-    pf["overview_size"] = np.log1p(pf["overview"].apply(lambda x : len(x.split(' ')) if not pd.isna(x) else 0))
-    pf.drop(['overview'], axis=1, inplace=True)
+    # pf['isMovieReleased'] = pf['status'].apply(lambda x: 1 if x == 'Released' else 0)
+
+    # pf['isTitleDifferent'] = 1
+    # pf.loc[ pf['original_title'] == pf['title'] ,"isTitleDifferent"] = 0
+
+    # pf["overview_size"] = np.log1p(pf["overview"].apply(lambda x : len(x.split(' ')) if not pd.isna(x) else 0))
+    pf.drop(['overview', 'original_title', 'title', 'status'], axis=1, inplace=True)
 
     # for k in pf:
     #     print(k + " --> " + str(pf[k].size))
@@ -677,12 +815,16 @@ def convert_label_to_int(df, feature_name, vocabulary_list):
 def process_additiona_features(df):
     df.drop('imdb_id', axis=1, inplace=True)
 
-    df['rating'] = df['rating'].fillna(df['rating'].mean())
-    df['vote_count'] = df['totalVotes'].fillna(df['totalVotes'].mean())
+    rating_na = df.groupby(["release_year","original_language"])['rating'].mean().reset_index()
+    df[df.rating.isna()]['rating'] = df.merge(rating_na, how = 'left' ,on = ["release_year","original_language"])
+    vote_count_na = df.groupby(["release_year","original_language"])['totalVotes'].mean().reset_index()
+    df['vote_count'] = df['totalVotes']
+    df[df.totalVotes.isna()]['vote_count'] = df.merge(vote_count_na, how = 'left' ,on = ["release_year","original_language"])
+
     df.drop('totalVotes',  axis=1, inplace=True)
 
-    #vote_count_na = df.groupby(["release_year","original_language"])['vote_count'].mean().reset_index()
-    #df[df.vote_count.isna()]['vote_count'] = df.merge(vote_count_na, how = 'left' ,on = ["release_year","original_language"])
+
+    df['weightedRating'] = ( df['rating']*df['vote_count'] + 6.367 * 1000 ) / ( df['vote_count'] + 1000 )
 
     df['meanruntimeByYear'] = df.groupby("release_year")["runtime"].aggregate('mean')
     df['meanPopularityByYear'] = df.groupby("release_year")["popularity"].aggregate('mean')
@@ -690,7 +832,10 @@ def process_additiona_features(df):
 
     df['_popularity_totalVotes_ratio'] = df['vote_count']/df['popularity']
     df['_popularity2_totalVotes_ratio'] = df['vote_count']/df['popularity2']
-    df['_totalVotes_releaseYear_ratio'] = df['vote_count']/df['release_year']
+
+    df['_vote_count_year_ratio_1'] = df['vote_count'] / (df['release_year'] * df['release_year'])
+    df['_vote_count_year_ratio_2'] = np.log1p(df['vote_count'] / df['release_year'])
+
     df['_budget_totalVotes_ratio'] = df['budget']/df['vote_count']
     
     
@@ -700,9 +845,10 @@ def process_additiona_features(df):
     df['_budget_rating_ratio'] = df['budget']/df['rating']
     df['_runtime_rating_ratio'] = df['runtime']/df['rating']
 
+
     df['popularity2'] = np.log1p(df['popularity2']).fillna(0)
-    df['rating'] =  linear_process(df['rating']).fillna(0)
-    df['vote_count'] = np.log1p(df['vote_count']).fillna(0)
+    df['rating_lr'] =  linear_process(df['rating']).fillna(0)
+    df['vote_count_lr'] = np.log1p(df['vote_count']).fillna(0)
     df.reset_index(inplace=True, drop=True)
 
     return df
@@ -712,13 +858,19 @@ def lgbm():
     import time
     random_seed = int(time.time()) 
 
+    # additionalTrainData = pd.read_csv('./additionalTrainData.csv')
+    # additionalTrainData['release_date'] = additionalTrainData['release_date'].astype('str')
+    # additionalTrainData['release_date'] = additionalTrainData['release_date'].str.replace('-', '/')
+    
+    # train = pd.concat([movie_dataframe, additionalTrainData])
     train = preprocess_features(movie_dataframe)
     train['id'] = movie_dataframe['id']
     train['revenue'] = movie_dataframe['revenue']
     convert_label_to_int(train, 'original_language', language_v_list)
 
     test_raw = pd.read_csv("test.csv")
-    test = preprocess_features(test_raw)
+    test = clean_test_data(test_raw)
+    test = preprocess_features(test)
     test['id'] = test_raw['id']
     convert_label_to_int(test, 'original_language', language_v_list)
 
@@ -732,12 +884,14 @@ def lgbm():
     train = process_additiona_features(train)
     test = process_additiona_features(test)
 
+
     features = list(train.columns)
     features =  [i for i in features if i != 'id' and i != 'revenue' and i != 'imdb_id']
 
     Kfolder = KFoldValidation(train)
 
     import lightgbm as lgb
+    print "======================= LGB ======================="
     lgbmodel = lgb.LGBMRegressor(n_estimators=10000, 
                              objective='regression', 
                              metric='rmse',
@@ -760,9 +914,9 @@ def lgbm():
 
     test['revenue'] =  np.expm1(test["lgbfinal"])
     test[['id','revenue']].to_csv('submission_lgb.csv', index=False)
-    test[['id','revenue']].head()
 
     import xgboost as xgb
+    print "======================= XGB ======================="
     xgbmodel = xgb.XGBRegressor(max_depth=5, 
                             learning_rate=0.01, 
                             n_estimators=10000, 
@@ -777,9 +931,9 @@ def lgbm():
 
     test['revenue'] =  np.expm1(test["xgbfinal"])
     test[['id','revenue']].to_csv('submission_xgb.csv', index=False)
-    test[['id','revenue']].head()
 
     import catboost as cat
+    print "======================= CAT ======================="
     catmodel = cat.CatBoostRegressor(iterations=10000, 
                                  learning_rate=0.01, 
                                  depth=5, 
@@ -789,6 +943,7 @@ def lgbm():
                                  metric_period = None,
                                  early_stopping_rounds=200,
                                  random_seed=random_seed)
+    # Kfolder = KFoldValidation(train[:3000])
     Kfolder.validate(train, test, features , catmodel, name="catfinal", prepare_stacking=True,
                fit_params={"use_best_model": True, "verbose": 100})
 
